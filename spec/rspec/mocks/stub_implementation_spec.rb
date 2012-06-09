@@ -56,6 +56,16 @@ module RSpec
         obj.unstub(:foo)
         obj.foo(3).should eq :three
       end
+
+      it "retains the child methods in case of stubbing & unstubbing both parent & child" do
+        class Parent; end
+        class Child < Parent; end
+        Parent.stub(:new)
+        Child.stub(:new)
+        Parent.unstub(:new)
+        Child.unstub(:new)
+        Child.new.should be_an_instance_of Child
+      end
     
       it "raises a MockExpectationError if the method has not been stubbed" do
         obj = Object.new
